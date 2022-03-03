@@ -8,24 +8,24 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-var options = {
-    dotfiles: 'ignore',
-    etag: false,
-    extensions: ['htm', 'html'],
-    index: false,
-    maxAge: '1d',
-    redirect: false,
-    setHeaders: function (res, path, stat) {
-      res.set('x-timestamp', Date.now())
-    }
-  }
+// var options = {
+//     dotfiles: 'ignore',
+//     etag: false,
+//     extensions: ['htm', 'html'],
+//     index: false,
+//     maxAge: '1d',
+//     redirect: false,
+//     setHeaders: function (res, path, stat) {
+//       res.set('x-timestamp', Date.now())
+//     }
+//   }
 
-  app.use(express.static('public', options));
+app.use(express.static('public'));
 
 //Route for the landing page.
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, '/index.html'));
-});
+// app.get("/", (req, res) => {
+//     res.sendFile(path.join(__dirname, '/index.html'));
+// });
 
 app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, '/notes.html'));

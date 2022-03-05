@@ -22,8 +22,11 @@ app.route('/api/notes')
 .get((req, res) => readFromFile(false, null, res))
 .post((req, res) =>  readFromFile(true, req.body, res));
 
+app.get('/*/', (req, res) => res.redirect('/index.html'))
+
 const writeToFile = (data, body, res) => {
     data.push(body);
+    addId(data);
     data = JSON.stringify(data);
     console.log(data);
     fs.writeFile("./db/db.json", data, function (err) {
@@ -35,6 +38,15 @@ const readFromFile = (write, body, res) => {
     let data = fs.readFileSync('./db/db.json', 'utf-8');
     data = JSON.parse(data);
     (write ? writeToFile(data, body, res): res.send(data));
+}
+
+const addId = (data , body) => {
+    var id = 0;
+    console.log(id);
+    data.forEach(element => {
+        element["id"] = id++;
+    });
+    return data;
 }
 
 app.listen(PORT, () => console.log(`API server now on port ${PORT}!`));

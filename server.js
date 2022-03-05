@@ -6,6 +6,7 @@ const db = require("./db/db.json");
 const path = require('path');
 
 const fs = require('fs');
+const { json } = require("body-parser");
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -19,15 +20,17 @@ app.get("/notes", (req, res) => res.sendFile(path.join(__dirname, '/notes.html')
 
 app.route('/api/notes')
 .get((req, res) => res.json(db))
-.post((req, res) =>  writeToFile(req.body));
+.post((req, res) =>  writeToFile(req.body, res));
 
-const writeToFile = body => {
-    console.log(body);
-    db.push(body);
-    var entries = JSON.stringify(db);
-    fs.writeFile("./db/db.json", entries, function (err) {
+const writeToFile = (body, res) => {
+    let data = fs.readFileSync('./db/db.json', 'utf-8');
+    data = JSON.parse(data);
+    data.push(body);
+    data = JSON.stringify(data);
+    console.log(data);
+    fs.writeFile("./db/db.json", data, function (err) {
         if (err) throw err;
-        console.log('Task was successfully saved!');
+        res.send('Task was successfully saved!');
     });
 }
 

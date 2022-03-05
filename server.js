@@ -1,45 +1,40 @@
 //Importing Express.js
 const express = require("express");
+//Importing the database.
+const db = require("./db/db.json");
 //Importhing path module.
 const path = require('path');
-// const index = require("./public/index.html");
+
+const fs = require('fs');
+const { json } = require("body-parser");
 
 const PORT = process.env.PORT || 3000;
-
 const app = express();
-
-// var options = {
-//     dotfiles: 'ignore',
-//     etag: false,
-//     extensions: ['htm', 'html'],
-//     index: false,
-//     maxAge: '1d',
-//     redirect: false,
-//     setHeaders: function (res, path, stat) {
-//       res.set('x-timestamp', Date.now())
-//     }
-//   }
 
 app.use(express.static('public'));
 
-//Route for the landing page.
-// app.get("/", (req, res) => {
-//     res.sendFile(path.join(__dirname, '/index.html'));
-// });
+app.use(express.urlencoded({ extended: true}))
+app.use(express.json())
 
-app.get("/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, '/notes.html'));
-});
+app.get("/notes", (req, res) => res.sendFile(path.join(__dirname, '/notes.html')));
 
-app.listen(PORT, () => {
-    console.log(`API server now on port ${PORT}!`);
-});
+app.route('/api/notes')
+.get((req, res) => readFromFile(false, null, res))
+.post((req, res) =>  readFromFile(true, req.body, res));
 
-/*Note:
-For the route paths, we can use regular expressions.
-- "/abc" => /abc normal
-- "/ab?cd" => /acd or /abcd (Zero or more of the character before "?")
-- "/ab+cd" => /abcd, /abbcd, abbbcd, etc. (One or more of the character before +)
-- "/ab*cd" => (/ab + anything + cd) (* = any character, any number of said character)
-- "/*man$/" => /ndhaman, /treman, /xerman, etc. (Anything ending with "man")
-*/
+const writeToFile = (data, body, res) => {
+    data.push(body);
+    data = JSON.stringify(data);
+    console.log(data);
+    fs.writeFile("./db/db.json", data, function (err) {
+        (err ? res.send('Something went wrong!') : res.send('Task was successfully saved!'));
+    });
+}
+
+const readFromFile = (write, body, res) => {
+    let data = fs.readFileSync('./db/db.json', 'utf-8');
+    data = JSON.parse(data);
+    (write ? writeToFile(data, body, res): res.send(data));
+}
+
+app.listen(PORT, () => console.log(`API server now on port ${PORT}!`));

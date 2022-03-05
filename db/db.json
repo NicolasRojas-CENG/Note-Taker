@@ -2,5 +2,9 @@
     {
         "title":"Test Title",
         "text":"Test text"
+    },
+    {
+        "title":"New Task",
+        "text":"Fix the task list"
     }
 ]

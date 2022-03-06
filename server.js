@@ -41,14 +41,14 @@ const saveTask = (body, res) => {
 //Function used to remove a task.
 const removeTask = (id, res) => {
     const data = readFromFile();
-    data = data.filter(function callback(item){
+    const newData = data.filter(function callback(item){
         if(item.id != id){
             return true
         } else {
             return false
         }
     });
-    writeToFile(body, res);
+    writeToFile(newData, res);
 }
 
 //Function used to get the saved tasks from the "database".

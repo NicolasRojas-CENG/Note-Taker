@@ -46,9 +46,10 @@ Bonus:
 - Made the README.md file.
 - deployed to Heroku.
 # <a name="Preview"> Site/App Preview </a>
-I will add this later.
+![Landing site preview](images/landing.PNG)
+![App site preview](images/app.PNG)
 # <a name="Deployed"> Deployed Site/App </a>
-I will add this later.
+https://eltiko-notetaker.herokuapp.com/
 # <a name="Questions"> Questions </a>
   If you have any questions, feel free to contact me through GitHub at 
   [nicolasrojas-ceng](https://github.com/nicolasrojas-ceng). <br>
